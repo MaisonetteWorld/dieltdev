@@ -8,7 +8,7 @@ import pendulum
 
 AIRBYTE_CONNECTION_ID = '91fb5891-7739-48aa-b03a-eb880aad839e'
 
-with DAG(dag_id='klaviyo-sync-postgress',
+with DAG(dag_id='klaviyo-sync-postgress-glue',
         default_args={'owner': 'airflow'},
         schedule='@daily',
         start_date=pendulum.today('UTC').add(days=-1)
