@@ -4,7 +4,7 @@ from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperat
 from airflow.providers.airbyte.sensors.airbyte import AirbyteJobSensor
 from airflow.sensors.filesystem import FileSensor
 from airflow.providers.amazon.aws.operators.glue import GlueJobOperator
-from airflow.providers.amazon.aws.operators.ecs import ECSOperator
+
 
 import pendulum
 
