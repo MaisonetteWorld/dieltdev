@@ -13,7 +13,7 @@ with DAG(dag_id='klaviyo-sync-postgress-glue1',
         start_date=pendulum.today('UTC').add(days=-1)
    ) as dag:
 
-submit_glue_job = GlueJobOperator(
+    submit_glue_job = GlueJobOperator(
     task_id="submit_glue_job",
     job_name="data_ingestion_rds",
     script_location=f"s3://maisonette-airbyte-integration-landing-dev/python-glue-dag-script/data_ingestion_rds.py",
