@@ -15,8 +15,8 @@ with DAG(dag_id='klaviyo-sync-postgress-glue1',
 
 submit_glue_job = GlueJobOperator(
     task_id="submit_glue_job",
-    job_name="Data-Flatten-klaviyo",
-    script_location=f"s3://maisonette-airbyte-integration-landing-dev/Flattened-data-glue-dag/maisonette_codes-0.0.1-py3-none-any.whl",
+    job_name="data_ingestion_rds",
+    script_location=f"s3://maisonette-airbyte-integration-landing-dev/python-glue-dag-script/data_ingestion_rds.py",
     s3_bucket="maisonette-airbyte-integration-landing-dev",
     iam_role_name=data-integration-glue-role,
     create_job_kwargs={"GlueVersion": "3.0", "NumberOfWorkers": 2, "WorkerType": "G.1X"},
