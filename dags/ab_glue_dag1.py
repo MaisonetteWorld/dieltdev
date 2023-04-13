@@ -36,4 +36,4 @@ with DAG(dag_id='klaviyo-sync-postgress-glue1',
        region_name='us-west-2'  # replace with your AWS region
    )
 
-   trigger_airbyte_sync >> wait_for_sync_completion >> trigger_glue_job
+trigger_glue_job
