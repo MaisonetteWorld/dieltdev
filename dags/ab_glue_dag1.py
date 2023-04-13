@@ -16,18 +16,18 @@ with DAG(dag_id='klaviyo-sync-postgress-glue1',
         start_date=pendulum.today('UTC').add(days=-1)
    ) as dag:
 
-   trigger_airbyte_sync = AirbyteTriggerSyncOperator(
-       task_id='airbyte_trigger_sync',
-       airbyte_conn_id='airbyteconnection',
-       connection_id=AIRBYTE_CONNECTION_ID,
-       asynchronous=True
-   )
+#    trigger_airbyte_sync = AirbyteTriggerSyncOperator(
+#        task_id='airbyte_trigger_sync',
+#        airbyte_conn_id='airbyteconnection',
+#        connection_id=AIRBYTE_CONNECTION_ID,
+#        asynchronous=True
+#    )
 
-   wait_for_sync_completion = AirbyteJobSensor(
-       task_id='airbyte_check_sync',
-       airbyte_conn_id='airbyteconnection',
-       airbyte_job_id=trigger_airbyte_sync.output
-   )
+#    wait_for_sync_completion = AirbyteJobSensor(
+#        task_id='airbyte_check_sync',
+#        airbyte_conn_id='airbyteconnection',
+#        airbyte_job_id=trigger_airbyte_sync.output
+#    )
 
    trigger_glue_job = GlueJobOperator(
        task_id='trigger_glue_job',
