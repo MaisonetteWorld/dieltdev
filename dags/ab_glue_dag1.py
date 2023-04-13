@@ -18,8 +18,10 @@ with DAG(dag_id='klaviyo-sync-postgress-glue1',
     job_name="data_ingestion_rds",
     script_location=f"s3://maisonette-airbyte-integration-landing-dev/python-glue-dag-script/data_ingestion_rds.py",
     s3_bucket="maisonette-airbyte-integration-landing-dev",
-    iam_role_name=data-integration-glue-role,
-    create_job_kwargs={"GlueVersion": "3.0", "NumberOfWorkers": 2, "WorkerType": "G.1X"},
+    iam_role_name="data-integration-glue-role",
+    aws_conn_id='airbyte_glue_data_flattening',  # replace with your AWS connection ID
+    region_name='us-west-2,'  # replace with your AWS region
+    create_job_kwargs={"GlueVersion": "3.0", "NumberOfWorkers": 2, "WorkerType": "G.1X"}
 )
 # trigger_glue_job
 submit_glue_job
