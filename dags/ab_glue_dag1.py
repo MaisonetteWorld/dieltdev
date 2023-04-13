@@ -21,7 +21,7 @@ with DAG(dag_id='klaviyo-sync-postgress-glue1',
     iam_role_name="data-integration-glue-role",
     aws_conn_id='airbyte_glue_data_flattening',  # replace with your AWS connection ID
     region_name='us-west-2,'  # replace with your AWS region
-    create_job_kwargs={"GlueVersion": "3.0", "NumberOfWorkers": 2, "WorkerType": "G.1X"},
+#     create_job_kwargs={"GlueVersion": "3.0", "NumberOfWorkers": 2, "WorkerType": "G.1X"},
 )
 # trigger_glue_job
 submit_glue_job
