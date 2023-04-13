@@ -3,7 +3,8 @@ from airflow.operators.bash import BashOperator
 from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperator
 from airflow.providers.airbyte.sensors.airbyte import AirbyteJobSensor
 from airflow.sensors.filesystem import FileSensor
-from airflow.providers.amazon.aws.operators.glue import AwsGlueETLJobOperator
+from airflow.providers.amazon.aws_glue_job_operator import AwsGlueETLJobOperator
+# from airflow.providers.amazon.aws.operators.glue import AwsGlueETLJobOperator
 
 import pendulum
 
