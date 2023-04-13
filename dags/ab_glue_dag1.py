@@ -19,7 +19,7 @@ default_args = {
 }
 
 
-with DAG(dag_id = 'klaviyo-sync-postgress-glue2', default_args = default_args, schedule_interval = None) as dag:
+with DAG(dag_id = 'klaviyo-sync-postgress-glue1', default_args = default_args, schedule_interval = None) as dag:
     
     glue_job_step = AwsGlueJobOperator(
         job_name =glue_job_name,
