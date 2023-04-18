@@ -16,8 +16,8 @@ with DAG(dag_id='klaviyo-sync-postgress-glue1',
 
     submit_glue_job = GlueJobOperator(
     task_id="submit_glue_job",
-    job_name="test_rds",
-    script_location=f"s3://aws-glue-assets-276428873250-us-west-2/scripts/test_rds.py",
+    job_name="test_python",
+    script_location=f"s3://aws-glue-assets-276428873250-us-west-2/scripts/test_python.py",
 #     extra_python_libs=f"s3://maisonette-airbyte-integration-landing-dev/python-glue-dag-script/glue_code_files-0.1-py3-none-any.whl",
     s3_bucket="maisonette-airbyte-integration-landing-dev",
     iam_role_name="data-integration-glue-role",
