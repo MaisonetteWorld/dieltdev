@@ -4,7 +4,7 @@ from airflow.providers.airbyte.operators.airbyte import AirbyteTriggerSyncOperat
 from airflow.providers.airbyte.sensors.airbyte import AirbyteJobSensor
 from airflow.sensors.filesystem import FileSensor
 from airflow.providers.amazon.aws.operators.glue import GlueJobOperator
-from airflow.providers.amazon.aws.operators.lambda import AwsLambdaInvokeFunctionOperator
+from airflow.providers.amazon.aws.operators.lambda import LambdaInvokeFunctionOperator
 import pendulum
 #AIRBYTE_CONNECTION_ID = '91fb5891-7739-48aa-b03a-eb880aad839e'
 
