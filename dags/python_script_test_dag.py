@@ -1,7 +1,9 @@
 from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
+from test_python_script import my_print_func
 import pendulum
+
 
 
 
@@ -11,9 +13,9 @@ with DAG(dag_id='my_python_script_dag',
         start_date=pendulum.today('UTC').add(days=-1)
    ) as dag:
 
-   run_python_script = BashOperator(
-      task_id= 'run_python_script',
-      bash_command= 'python scripts/test_python_script.py',
+   run_this = PythonOperator(
+      task_id='my_python_operator',
+      python_callable= my_print_func,
       dag=dag
    )
 
