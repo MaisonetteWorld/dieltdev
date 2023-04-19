@@ -2,6 +2,7 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.bash import BashOperator
 from test_python_script import my_print_func
+from airflow.operators.python_operator import PythonOperator
 import pendulum
 
 
