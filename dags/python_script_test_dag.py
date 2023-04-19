@@ -20,4 +20,5 @@ with DAG(dag_id='my_python_script_dag',
       dag=dag
    )
 
-   run_python_script
+   
+run_this
