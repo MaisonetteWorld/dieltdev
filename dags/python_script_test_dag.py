@@ -19,6 +19,4 @@ with DAG(dag_id='my_python_script_dag',
       python_callable= my_print_func,
       dag=dag
    )
-
-   
-run_this
+   run_this
