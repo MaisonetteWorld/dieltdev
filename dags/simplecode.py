@@ -27,9 +27,14 @@ with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as da
         combined = []
         for json_file in s3_hook.list_keys(bucket_name=source_bucket_name, prefix=source_prefix):
             file_content = s3_hook.read_key(key=json_file, bucket_name=source_bucket_name)
-            print(f"File content: {file_content}")
-            combined.append(json.loads(file_content))
-
+            if file_content.strip() == "":
+                # Skip empty files
+                continue
+            try:
+                combined.append(json.loads(file_content))
+            except json.decoder.JSONDecodeError:
+                # Skip malformed files
+                print(f"Skipping malformed file: {json_file}")
 
         combined_json = json.dumps(combined).encode('utf-8')  # Convert string data to bytes
         s3_hook.load_bytes(
