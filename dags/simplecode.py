@@ -43,7 +43,10 @@ check_folder = S3KeySensor(
     task_id='check_folder',
     bucket_key='your-bucket-name/your-folder-name/',
     wildcard_match=True,
-    aws_conn_id='aws_default',
+    iam_role_name="data-integration-glue-role",
+    aws_conn_id='airbyte_glue_data_flattening',  # replace with your AWS connection ID
+    region_name="us-west-2" ,
+#     aws_conn_id='aws_default',
     poke_interval=60 * 5,
     dag=dag,
 )
