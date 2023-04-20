@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python_operator import PythonOperator
 
-DAG_ID = "mydemo_combine_json_files"
+DAG_ID = "mydemocombine_json_files"
 
 default_args = {
     "owner": "airflow",
@@ -26,7 +26,7 @@ with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as da
         
         combined = []
         for json_file in s3_hook.list_keys(bucket_name=source_bucket_name, prefix=source_prefix):
-            file_content = s3_hook.read_key(json_file)
+            file_content = s3_hook.read_key(key=json_file, bucket_name=source_bucket_name)
             combined.append(json.loads(file_content))
         
         combined_json = json.dumps(combined)
@@ -45,34 +45,3 @@ with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as da
     )
 
     combine_files
-
-
-
-
-# from datetime import datetime
-# from typing import List, Optional, Tuple
-# from airflow import DAG
-# from airflow.providers.amazon.aws.operators.s3 import S3FileTransformOperator
-# import os
-
-# # This fixed NEGSIG.SIGEV error
-# os.environ['no_proxy'] = '*'
-
-# DAG_ID = "s3_file_transform"
-
-
-# with DAG(
-#     dag_id=DAG_ID,
-#     schedule=None,
-#     start_date=datetime(2022, 11, 10),
-#     tags=["example"],
-#     catchup=False,
-# ) as dag:
-
-#     move_files = S3FileTransformOperator(
-#         task_id="move_files",
-#         source_s3_key='s3://maisonette-airbyte-integration-landing-dev/dummyfolder1/myfile1.json',
-#         dest_s3_key="s3://maisonette-airbyte-integration-landing-dev/dummyfolder2/myfile1.json",
-#         transform_script="/bin/cp"
-#     )
-
