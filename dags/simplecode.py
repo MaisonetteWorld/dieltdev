@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python_operator import PythonOperator
 
-DAG_ID = "combine_json_files"
+DAG_ID = "mydemo_combine_json_files"
 
 default_args = {
     "owner": "airflow",
