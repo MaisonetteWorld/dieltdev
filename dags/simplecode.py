@@ -1,7 +1,7 @@
 import boto3
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from airflow.operators.sensors import S3KeySensor
+from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
 from datetime import datetime, timedelta
 
 s3 = boto3.client('s3')
