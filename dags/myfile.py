@@ -3,7 +3,7 @@ import boto3
 import glob
 import os
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
 s3 = boto3.resource('s3')
