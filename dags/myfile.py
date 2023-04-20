@@ -4,8 +4,6 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
 from datetime import datetime, timedelta
-from airflow.providers.http.operators.http import SimpleHttpOperator
-from airflow.operators import SimpleHttpOperator, HttpSensor, EmailOperator, S3KeySensor
 import os
 
 s3 = boto3.client('s3')
