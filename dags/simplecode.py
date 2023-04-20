@@ -36,7 +36,7 @@ with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as da
 #             key=destination_key,
 #             bucket_name=destination_bucket_name,
 #             replace=True
-        )
+#         )
         
         print(f"Combined JSON data saved to S3 bucket {destination_bucket_name} with key {destination_key}")
 
