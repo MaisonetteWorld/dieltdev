@@ -3,13 +3,13 @@ import boto3
 import glob
 import os
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
 s3 = boto3.resource('s3')
 bucket_name = 'maisonette-airbyte-integration-landing-dev'
-input_prefix = 'dummyfolder1/'
-output_prefix = 'dummyfolder2/'
+input_prefix = 'dummyfolder1'
+output_prefix = 'dummyfolder2'
 output_file_name = 'combinedtest.json'
 
 default_args = {
@@ -28,7 +28,7 @@ dag = DAG(
 
 def combine_json_files():
     combined = []
-    for json_file in glob.glob(input_prefix + "/*.json"):
+    for json_file in glob.glob(f"{input_prefix}/*.json"):
         with open(json_file, "r") as infile:
             for line in infile:
                 combined.append(json.loads(line))
@@ -36,7 +36,7 @@ def combine_json_files():
     with open(output_file_path, "w") as outfile:
         for item in combined:
             outfile.write(json.dumps(item) + "\n")
-    s3.meta.client.upload_file(output_file_path, bucket_name, output_file_path)
+    s3.meta.client.upload_file(output_file_path, bucket_name, f"{output_prefix}/{output_file_name}")
 
 combine_files = PythonOperator(
     task_id='combine_files',
