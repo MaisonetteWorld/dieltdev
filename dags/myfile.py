@@ -2,9 +2,9 @@ import json
 import boto3
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-# from airflow.providers.amazon.aws.sensors.s3_key import S3KeySensor
+from airflow.providers.amazon.aws.sensors import S3KeySensor
 from datetime import datetime, timedelta
-from airflow.operators import SimpleHttpOperator, HttpSensor, EmailOperator, S3KeySensor
+# from airflow.operators import SimpleHttpOperator, HttpSensor, EmailOperator, S3KeySensor
 import os
 
 s3 = boto3.client('s3')
