@@ -1,17 +1,14 @@
 import json
 import boto3
-import glob
-import os
+import io
 from airflow import DAG
-from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
 s3 = boto3.resource('s3')
 bucket_name = 'maisonette-airbyte-integration-landing-dev'
 input_prefix = 'dummyfolder1/'
-output_prefix = 'dummyfolder2/'
-output_file_name = 'combinedtest.json'
+
 
 default_args = {
     'owner': 'airflow',
@@ -27,27 +24,17 @@ dag = DAG(
     schedule_interval='@daily'
 )
 
-def create_output_directory():
-    if not os.path.exists(output_prefix):
-        os.makedirs(output_prefix)
-
-create_dir = BashOperator(
-    task_id='create_output_directory',
-    bash_command=f'mkdir -p {output_prefix}',
-    dag=dag
-)
 
 def combine_json_files():
     combined = []
-    for json_file in glob.glob(input_prefix + "/*.json"):
-        with open(json_file, "r") as infile:
-            for line in infile:
-                combined.append(json.loads(line))
-    output_file_path = os.path.join(output_prefix, output_file_name)
-    with open(output_file_path, "w") as outfile:
-        for item in combined:
-            outfile.write(json.dumps(item) + "\n")
-    s3.meta.client.upload_file(output_file_path, bucket_name, output_file_path)
+    bucket = s3.Bucket(bucket_name)
+    for obj in bucket.objects.filter(Prefix=input_prefix):
+        if obj.key.endswith('.json'):
+            body = obj.get()['Body'].read()
+            for line in body.decode().split('\n'):
+                if line:
+                    combined.append(json.loads(line))
+    print(json.dumps(combined))
 
 combine_files = PythonOperator(
     task_id='combine_files',
@@ -55,4 +42,3 @@ combine_files = PythonOperator(
     dag=dag
 )
 
-create_dir >> combine_files
