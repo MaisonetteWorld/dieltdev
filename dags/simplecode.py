@@ -46,4 +46,4 @@ with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as da
         python_callable=combine_json_files
     )
 
-    combine_files()
+    combine_files
