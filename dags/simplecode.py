@@ -1,28 +1,27 @@
 from datetime import datetime
-from airflow.models import DAG
-from airflow.operators.python import PythonOperator
-from airflow.hooks.S3_hook import S3Hook
+from typing import List, Optional, Tuple
+from airflow import DAG
+from airflow.providers.amazon.aws.operators.s3 import S3FileTransformOperator
+import os
 
+# This fixed NEGSIG.SIGEV error
+os.environ['no_proxy'] = '*'
 
-def upload_to_s3(filename: str, key: str, bucket_name: str) -> None:
-    hook = S3Hook('airbyte_glue_data_flattening')
-    hook.load_file(filename=filename, key=key, bucket_name=bucket_name)
+DAG_ID = "s3_file_transform"
 
 
 with DAG(
-    dag_id='s3_dag',
-    schedule_interval='@daily',
-    start_date=datetime(2022, 3, 1),
-    catchup=False
+    dag_id=DAG_ID,
+    schedule=None,
+    start_date=datetime(2022, 11, 10),
+    tags=["example"],
+    catchup=False,
 ) as dag:
 
-    # Upload the file
-    task_upload_to_s3 = PythonOperator(
-        task_id='upload_to_s3',
-        python_callable=upload_to_s3,
-        op_kwargs={
-            'filename': '/Users/dradecic/airflow/data/posts.json',
-            'key': 'posts.json',
-            'bucket_name': 'maisonette-airbyte-integration-landing-dev'
-        }
+    move_files = S3FileTransformOperator(
+        task_id="move_files",
+        source_s3_key='s3://maisonette-airbyte-integration-landing-dev/dummyfolder1/myfile1.json',
+        dest_s3_key="s3://maisonette-airbyte-integration-landing-dev/dummyfolder2/myfile1.json",
+        transform_script="/bin/cp"
     )
+
