@@ -43,7 +43,7 @@ def fix_json(json_string):
 
 with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as dag:
 
-    def process_json_files(input_dir, output_dir):
+    def process_json_files():
         s3_hook = S3Hook(aws_conn_id='airbyte_glue_data_flattening')
         source_bucket_name = 'maisonette-airbyte-integration-landing-dev'
         source_prefix = 'input_folder/'
