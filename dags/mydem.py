@@ -90,7 +90,7 @@ with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as da
                 # Skip empty files
                 continue
             try:
-                combined.append(json.loads(file_content))
+                combined.extend(json.loads(file_content))
             except json.decoder.JSONDecodeError:
                 # Skip malformed files
                 print(f"Skipping malformed file: {json_file}")
