@@ -3,9 +3,6 @@ import json
 from airflow import DAG
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python_operator import PythonOperator
-import simplejson as json
-
-import demjson
 
 
 DAG_ID = "new_mydemocombine_json_files"
@@ -19,9 +16,34 @@ default_args = {
 }
 
 
+def fix_json(json_string):
+    """
+    Takes a JSON string and tries to fix any errors.
+    """
+    try:
+        json_object = json.loads(json_string)
+        return json_object
+    except json.JSONDecodeError:
+        fixed_json = None
+        if json_string.startswith("{") and json_string.endswith("}"):
+            # Try to fix JSON with missing quotes around keys
+            fixed_json = json.loads(json_string.replace("'", "\""))
+        elif json_string.startswith("[") and json_string.endswith("]"):
+            # Try to fix JSON with missing quotes around keys and values
+            fixed_json = json.loads(json_string.replace("'", "\"").replace("True", "\"True\"").replace("False", "\"False\"").replace("None", "\"None\""))
+        elif not json_string.endswith(","):
+            # Try to fix JSON with missing comma at the end
+            fixed_json = json.loads(json_string + ",")
+        if fixed_json:
+            return fixed_json
+        else:
+            # If unable to fix JSON, return an empty dictionary
+            return {}
+
+
 with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as dag:
 
-    def process_json_files():
+    def process_json_files(input_dir, output_dir):
         s3_hook = S3Hook(aws_conn_id='airbyte_glue_data_flattening')
         source_bucket_name = 'maisonette-airbyte-integration-landing-dev'
         source_prefix = 'input_folder/'
@@ -33,13 +55,9 @@ with DAG(dag_id=DAG_ID, default_args=default_args, schedule_interval=None) as da
             output_filename = json_file.split('/')[-1]  # Use the source filename as the basis for the output filename
             valid_json_objects = []
             for line in file_content.splitlines():
-                try:
-                    json_object = json.loads(line)
-                    valid_json_objects.append(json_object)
-                except json.JSONDecodeError:
-                    # Try to fix invalid JSON with demjson
-                    fixed_json = demjson.decode(line, strict=False)
-                    valid_json_objects.append(fixed_json)
+                valid_json = fix_json(line)
+                if valid_json:
+                    valid_json_objects.append(valid_json)
             if len(valid_json_objects) > 0:
                 valid_json = json.dumps(valid_json_objects).encode('utf-8')
                 s3_hook.load_bytes(
