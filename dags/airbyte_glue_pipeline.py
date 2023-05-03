@@ -24,7 +24,7 @@ with DAG(
    wait_for_salsify_sync_completion = AirbyteJobSensor(
        task_id='airbyte_check_salsify_sync',
        airbyte_conn_id='airbyteconnection',
-       airbyte_job_id=trigger_airbyte_sync.output
+       airbyte_job_id=trigger_airbyte_salsify_sync.output
    )
    
    glue_job_operator_flatten = GlueJobOperator(
